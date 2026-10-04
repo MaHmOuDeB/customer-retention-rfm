@@ -1,0 +1,174 @@
+{
+  "data": {
+    "raw_rows": 1067371,
+    "rows_without_customer_id": 243007,
+    "cancellation_rows": 19494,
+    "clean_sales_rows": 802632,
+    "customers": 5852,
+    "orders": 36594,
+    "first_date": "2009-12-01",
+    "last_date": "2011-12-09",
+    "revenue_gbp": 17434450
+  },
+  "cohorts": {
+    "cohorts_shown": 13,
+    "avg_retention_month1": 0.202,
+    "month3": 0.222,
+    "month6": 0.182,
+    "month12": 0.183
+  },
+  "snapshots": {
+    "train_cutoff": "2011-06-10",
+    "test_cutoff": "2011-09-09",
+    "train_customers": 4951,
+    "test_customers": 5256,
+    "train_repurchase_rate": 0.32,
+    "test_repurchase_rate": 0.435
+  },
+  "model_out_of_time": {
+    "Baseline: most recent buyer first": {
+      "roc_auc": 0.762,
+      "avg_precision": 0.685,
+      "precision_top10pct": 0.781,
+      "lift_top10pct": 1.79,
+      "lapsed_roc_auc": 0.685,
+      "lapsed_precision_top10pct": 0.552,
+      "lapsed_lift_top10pct": 1.9
+    },
+    "Logistic regression": {
+      "roc_auc": 0.791,
+      "avg_precision": 0.763,
+      "precision_top10pct": 0.912,
+      "lift_top10pct": 2.1,
+      "lapsed_roc_auc": 0.705,
+      "lapsed_precision_top10pct": 0.57,
+      "lapsed_lift_top10pct": 1.96
+    },
+    "Gradient boosting": {
+      "roc_auc": 0.793,
+      "avg_precision": 0.767,
+      "precision_top10pct": 0.933,
+      "lift_top10pct": 2.14,
+      "lapsed_roc_auc": 0.711,
+      "lapsed_precision_top10pct": 0.636,
+      "lapsed_lift_top10pct": 2.19
+    }
+  },
+  "lapsed_group": {
+    "definition": "no order in the 90 days before the test cutoff",
+    "customers": 3353,
+    "reactivation_rate_next_90d": 0.29,
+    "active_group_repurchase_rate": 0.69
+  },
+  "permutation_importance_auc_drop": {
+    "recency_days": 0.0594,
+    "frequency": 0.0304,
+    "monetary": 0.022,
+    "revenue_last_90d": 0.0069,
+    "orders_last_90d": 0.0034,
+    "tenure_days": 0.0033
+  },
+  "rfm_segments": {
+    "Champions": {
+      "customers": 1211.0,
+      "revenue_share": 0.702,
+      "median_recency": 28.0,
+      "median_orders": 10.0,
+      "repurchase_rate_90d": 0.802,
+      "customer_share": 0.23
+    },
+    "Loyal": {
+      "customers": 1181.0,
+      "revenue_share": 0.144,
+      "median_recency": 113.0,
+      "median_orders": 4.0,
+      "repurchase_rate_90d": 0.514,
+      "customer_share": 0.225
+    },
+    "New / recent": {
+      "customers": 370.0,
+      "revenue_share": 0.013,
+      "median_recency": 42.0,
+      "median_orders": 1.0,
+      "repurchase_rate_90d": 0.47,
+      "customer_share": 0.07
+    },
+    "At risk (were frequent)": {
+      "customers": 310.0,
+      "revenue_share": 0.059,
+      "median_recency": 304.0,
+      "median_orders": 5.0,
+      "repurchase_rate_90d": 0.313,
+      "customer_share": 0.059
+    },
+    "Occasional": {
+      "customers": 391.0,
+      "revenue_share": 0.012,
+      "median_recency": 171.0,
+      "median_orders": 1.0,
+      "repurchase_rate_90d": 0.215,
+      "customer_share": 0.074
+    },
+    "Lapsed": {
+      "customers": 1793.0,
+      "revenue_share": 0.069,
+      "median_recency": 360.0,
+      "median_orders": 1.0,
+      "repurchase_rate_90d": 0.197,
+      "customer_share": 0.341
+    }
+  },
+  "kmeans_silhouette": {
+    "by_k": {
+      "2": 0.458,
+      "3": 0.365,
+      "4": 0.381,
+      "5": 0.328,
+      "6": 0.324,
+      "7": 0.294
+    },
+    "best_k": 2
+  },
+  "kmeans_profile_k": {
+    "0": {
+      "customers": 1834.0,
+      "median_recency": 38.0,
+      "median_orders": 8.0,
+      "median_monetary": 2963.975,
+      "repurchase_rate_90d": 0.722
+    },
+    "1": {
+      "customers": 3422.0,
+      "median_recency": 290.0,
+      "median_orders": 2.0,
+      "median_monetary": 426.48,
+      "repurchase_rate_90d": 0.281
+    }
+  },
+  "lapsed_targeting_table": [
+    {
+      "contact_share": 0.05,
+      "contacted": 167,
+      "expected_reactivations_model": 118,
+      "expected_reactivations_random": 48.5
+    },
+    {
+      "contact_share": 0.1,
+      "contacted": 335,
+      "expected_reactivations_model": 213,
+      "expected_reactivations_random": 97.3
+    },
+    {
+      "contact_share": 0.2,
+      "contacted": 670,
+      "expected_reactivations_model": 360,
+      "expected_reactivations_random": 194.6
+    },
+    {
+      "contact_share": 0.3,
+      "contacted": 1005,
+      "expected_reactivations_model": 487,
+      "expected_reactivations_random": 291.9
+    }
+  ]
+}

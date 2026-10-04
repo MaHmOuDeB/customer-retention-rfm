@@ -49,3 +49,18 @@ def test_returns_after_the_cutoff_are_ignored_and_ratio_is_computed():
     f = build([(1, "A1", "2011-06-01", 200.0, 1, "United Kingdom")],
               returns=[(1, "2011-06-05", 50.0), (1, "2011-08-01", 500.0)])
     assert abs(f.loc[1, "return_ratio"] - 0.25) < 1e-9
+
+
+def test_revenue_in_the_label_window_only_counts_the_next_90_days():
+    f = build([
+        (1, "A1", "2011-06-01", 100.0, 1, "United Kingdom"),
+        (1, "A2", "2011-07-01", 40.0, 1, "United Kingdom"),     # inside the window
+        (1, "A3", "2011-08-01", 60.0, 1, "United Kingdom"),     # inside the window
+        (1, "A4", "2011-12-01", 999.0, 1, "United Kingdom"),    # far outside the window
+    ])
+    assert f.loc[1, "revenue_next_90d"] == 100.0 and f.loc[1, "monetary"] == 100.0
+
+
+def test_feature_rows_come_out_sorted_by_customer():
+    f = build([(3, "C1", "2011-06-01", 1.0, 1, "UK"), (1, "A1", "2011-06-01", 1.0, 1, "UK"), (2, "B1", "2011-06-01", 1.0, 1, "UK")])
+    assert list(f.index) == [1, 2, 3]

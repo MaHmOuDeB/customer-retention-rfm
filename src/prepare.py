@@ -1,5 +1,6 @@
 """Convert the UCI Online Retail II workbook (two sheets) into one Parquet file. Run once; slow (about 2-4 minutes)."""
 from pathlib import Path
+
 import pandas as pd
 
 DATA = Path(__file__).resolve().parent.parent / "data"

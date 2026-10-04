@@ -1,0 +1,19 @@
+[project]
+name = "customer-retention-rfm"
+version = "1.0.0"
+description = "Cohort retention, RFM segments and a 90-day repurchase model on UCI Online Retail II (DuckDB SQL + scikit-learn)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Mahmoud El Bergui" }]
+
+[tool.ruff]
+line-length = 150
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501", "E731"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

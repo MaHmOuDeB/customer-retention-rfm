@@ -64,7 +64,7 @@ Returns after more than a day, or for part of an order, stay in.
 
 **Retention is low and flat after month 1.** The heatmap shows the Jan to Nov 2010 cohorts, and the averages are weighted by cohort
 size. Dec 2009 is left out because the data starts that month, so that cohort contains customers who were already buying, and
-Dec 2010 is left out because its month 12 is only nine days of data. Part of the late-year bounce is Christmas buying.
+Dec 2010 is left out because its month 12 is only nine days of data. Month N means N calendar months after the month of the first order. The bounce in the later cohorts at months 11 and 12 likely reflects seasonal buying.
 
 ![Cohort retention](reports/figures/cohort_retention.png)
 

@@ -94,9 +94,10 @@ To measure what an offer is worth, split the target list at random into contact 
 | All lapsed customers | 29% | 8,240 | 3,696 | 1,353 |
 | Top 20% of lapsed by score | 54% | 9,722 | 4,312 | 1,545 |
 
-At this retailer's size (3,353 lapsed customers) only a +5 pp or larger uplift is detectable in a single round, and the likeliest
-returners are the *hardest* group to test, because their high baseline leaves less room to improve. A practical design is to
-test across several months or to target mid-ranked customers, where an offer has more to change.
+At this retailer's size (3,353 lapsed customers) only a +5 pp or larger uplift could be detected in a single round, and only on
+the full lapsed list (2 x 1,353 customers). The top-20% list has just 670 customers, far fewer than any arm needs, and the
+likeliest returners are also the hardest group to test because their high baseline leaves less room to improve. A practical
+design is to run the test over several months or to include mid-ranked customers, where an offer has more to change.
 
 ## Limits
 

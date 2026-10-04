@@ -12,7 +12,7 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
-      - run: pip install duckdb pandas numpy pytest ruff
+      - run: pip install duckdb pandas numpy scikit-learn statsmodels matplotlib pytest ruff
       - name: Lint
         run: ruff check .
       - name: Tests (synthetic data, no download needed)

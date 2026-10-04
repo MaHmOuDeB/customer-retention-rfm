@@ -48,20 +48,35 @@ def run_sql(con: duckdb.DuckDBPyConnection, name: str, **params: str) -> None:
 
 # ---------- data and cohorts ----------
 def data_summary(con: duckdb.DuckDBPyConnection) -> dict:
+    """Row counts from raw to final sales, so every dropped row is accounted for."""
     scalar = lambda q: con.execute(q).fetchone()[0]  # noqa: E731
+    raw_n = scalar("SELECT COUNT(*) FROM raw")
+    no_id = scalar("SELECT COUNT(*) FROM raw WHERE customer_id IS NULL")
+    cancel = scalar("SELECT COUNT(*) FROM raw WHERE customer_id IS NOT NULL AND invoice LIKE 'C%'")
+    candidates = scalar("SELECT COUNT(*) FROM raw WHERE customer_id IS NOT NULL AND invoice NOT LIKE 'C%'")
+    sales_all = scalar("SELECT COUNT(*) FROM sales_all")
     sales_n, n_cust, d0, d1, revenue = con.execute(
         "SELECT COUNT(*), COUNT(DISTINCT customer_id), MIN(invoice_date), MAX(invoice_date), SUM(revenue) FROM sales").fetchone()
-    return {"raw_rows": scalar("SELECT COUNT(*) FROM raw"), "rows_without_customer_id": scalar("SELECT COUNT(*) FROM raw WHERE customer_id IS NULL"),
-            "cancellation_rows": scalar("SELECT COUNT(*) FROM raw WHERE invoice LIKE 'C%'"), "clean_sales_rows": sales_n, "customers": n_cust,
-            "orders": scalar("SELECT COUNT(*) FROM orders"), "first_date": str(d0), "last_date": str(d1), "revenue_gbp": round(revenue)}
+    rev_all = scalar("SELECT SUM(revenue) FROM sales_all")
+    return {"raw_rows": raw_n, "rows_without_customer_id": no_id, "cancellation_rows_with_customer_id": cancel,
+            "non_product_or_invalid_rows": candidates - sales_all, "sales_lines_before_reversal_check": sales_all,
+            "order_lines_reversed_within_24h": sales_all - sales_n, "revenue_reversed_within_24h_gbp": round(rev_all - revenue),
+            "clean_sales_rows": sales_n, "customers": n_cust, "orders": scalar("SELECT COUNT(*) FROM orders"),
+            "first_date": str(d0), "last_date": str(d1), "revenue_gbp": round(revenue)}
 
 
-def cohort_matrix(con: duckdb.DuckDBPyConnection) -> pd.DataFrame:
-    """Retention by acquisition month, for cohorts with at least 12 months of follow-up."""
+def cohort_matrix(con: duckdb.DuckDBPyConnection) -> tuple[pd.DataFrame, dict]:
+    """Retention by acquisition month for the Jan to Nov 2010 cohorts.
+
+    Dec 2009 is left out (the data starts that month, so it holds customers who were already buying) and so is Dec 2010
+    (its month 12 is the nine days of Dec 2011). Averages are weighted by cohort size.
+    """
     run_sql(con, "03_cohorts.sql")
-    pivot = con.execute("SELECT * FROM cohort_retention").df().pivot(index="cohort_month", columns="month_n", values="retention")
-    pivot = pivot[pivot.index <= pd.Timestamp("2010-12-01")]
-    return pivot[[c for c in pivot.columns if c <= 12]]
+    table = con.execute("SELECT * FROM cohort_retention WHERE cohort_month BETWEEN DATE '2010-01-01' AND DATE '2010-11-01' AND month_n <= 12").df()
+    pivot = table.pivot(index="cohort_month", columns="month_n", values="retention")
+    sizes = table[table.month_n == 0].set_index("cohort_month").cohort_size
+    weighted = {m: float(table[table.month_n == m].active_customers.sum() / sizes.sum()) for m in (1, 3, 6, 12)}
+    return pivot, weighted
 
 
 def plot_cohorts(pivot: pd.DataFrame) -> None:
@@ -75,7 +90,7 @@ def plot_cohorts(pivot: pd.DataFrame) -> None:
             if not np.isnan(value):
                 ax.text(j, i, f"{value * 100:.0f}", ha="center", va="center", fontsize=7, color="white" if value > .35 else "black")
     ax.set_xlabel("Months since first order")
-    ax.set_title("Share of each acquisition cohort that orders again (%)")
+    ax.set_title("Share of each 2010 acquisition cohort that orders again (%)")
     fig.colorbar(image, ax=ax, shrink=.8)
     fig.tight_layout()
     fig.savefig(FIG / "cohort_retention.png")
@@ -180,15 +195,21 @@ def rule_segment(r: pd.Series) -> str:
     if r.R <= 2 and r.F >= 4:
         return "At risk (were frequent)"
     if r.R <= 2:
-        return "Lapsed"
+        return "Dormant"
     return "Occasional"
+
+
+def quintile_score(values: pd.Series, higher_is_better: bool = True) -> pd.Series:
+    """Score 1 to 5 from the average rank, so customers with identical values always get identical scores."""
+    ranks = values.rank(method="average", ascending=higher_is_better)
+    return np.ceil(5 * ranks / len(values)).clip(1, 5).astype(int)
 
 
 def rfm_segments(test: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     seg = test.copy()
-    seg["R"] = pd.qcut(seg.recency_days.rank(method="first", ascending=False), 5, labels=[1, 2, 3, 4, 5]).astype(int)
-    seg["F"] = pd.qcut(seg.frequency.rank(method="first"), 5, labels=[1, 2, 3, 4, 5]).astype(int)
-    seg["M"] = pd.qcut(seg.monetary.rank(method="first"), 5, labels=[1, 2, 3, 4, 5]).astype(int)
+    seg["R"] = quintile_score(seg.recency_days, higher_is_better=False)
+    seg["F"] = quintile_score(seg.frequency)
+    seg["M"] = quintile_score(seg.monetary)
     seg["segment"] = seg.apply(rule_segment, axis=1)
     prof = seg.groupby("segment").agg(customers=("customer_id", "size"), revenue_share=("monetary", "sum"), median_recency=("recency_days", "median"),
                                       median_orders=("frequency", "median"), repurchase_rate_90d=("repurchased_90d", "mean"))
@@ -258,9 +279,9 @@ def main() -> None:
     run_sql(con, "01_clean.sql")
     results: dict = {"data": data_summary(con)}
 
-    pivot = cohort_matrix(con)
+    pivot, weighted = cohort_matrix(con)
     plot_cohorts(pivot)
-    results["cohorts"] = {"cohorts_shown": int(pivot.shape[0]), **{f"avg_retention_month{m}": round(float(pivot[m].mean()), 3) for m in (1, 3, 6, 12)}}
+    results["cohorts"] = {"cohorts_shown": "Jan to Nov 2010", "weighted_by_cohort_size": True, **{f"retention_month{m}": round(v, 3) for m, v in weighted.items()}}
 
     train, test = snapshot(con, TRAIN_CUTOFF), snapshot(con, TEST_CUTOFF)
     results["snapshots"] = {"train_cutoff": TRAIN_CUTOFF, "test_cutoff": TEST_CUTOFF, "train_customers": len(train), "test_customers": len(test),
@@ -281,7 +302,7 @@ def main() -> None:
     plot_models(scores, y, importance, results["calibration_gradient_boosting"])
 
     seg, prof = rfm_segments(test)
-    results["rfm_segments"] = {k: {c: round(float(v), 3) for c, v in row.items()} for k, row in prof.iterrows()}
+    results["rfm_segments"] = {k: {c: (int(v) if c == "customers" else round(float(v), 3)) for c, v in row.items()} for k, row in prof.iterrows()}
     plot_segments(prof)
     sil, cprof = kmeans_check(seg)
     results["kmeans_silhouette"] = sil

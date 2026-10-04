@@ -2,26 +2,31 @@
   "data": {
     "raw_rows": 1067371,
     "rows_without_customer_id": 243007,
-    "cancellation_rows": 19494,
-    "clean_sales_rows": 802632,
-    "customers": 5852,
-    "orders": 36594,
+    "cancellation_rows_with_customer_id": 18744,
+    "non_product_or_invalid_rows": 2988,
+    "sales_lines_before_reversal_check": 802632,
+    "order_lines_reversed_within_24h": 1498,
+    "revenue_reversed_within_24h_gbp": 406533,
+    "clean_sales_rows": 801134,
+    "customers": 5850,
+    "orders": 36452,
     "first_date": "2009-12-01",
     "last_date": "2011-12-09",
-    "revenue_gbp": 17434450
+    "revenue_gbp": 17027917
   },
   "cohorts": {
-    "cohorts_shown": 13,
-    "avg_retention_month1": 0.202,
-    "avg_retention_month3": 0.222,
-    "avg_retention_month6": 0.182,
-    "avg_retention_month12": 0.183
+    "cohorts_shown": "Jan to Nov 2010",
+    "weighted_by_cohort_size": true,
+    "retention_month1": 0.201,
+    "retention_month3": 0.212,
+    "retention_month6": 0.186,
+    "retention_month12": 0.184
   },
   "snapshots": {
     "train_cutoff": "2011-06-10",
     "test_cutoff": "2011-09-09",
-    "train_customers": 4951,
-    "test_customers": 5256,
+    "train_customers": 4948,
+    "test_customers": 5253,
     "train_repurchase_rate": 0.32,
     "test_repurchase_rate": 0.435
   },
@@ -29,179 +34,179 @@
     "Baseline: most recent buyer first": {
       "roc_auc": 0.762,
       "avg_precision": 0.685,
-      "precision_top10pct": 0.777,
+      "precision_top10pct": 0.779,
       "lift_top10pct": 1.79,
       "lapsed_roc_auc": 0.685,
-      "lapsed_precision_top10pct": 0.549,
-      "lapsed_lift_top10pct": 1.89
+      "lapsed_precision_top10pct": 0.546,
+      "lapsed_lift_top10pct": 1.88
     },
     "Logistic regression": {
-      "roc_auc": 0.791,
+      "roc_auc": 0.792,
       "avg_precision": 0.763,
-      "precision_top10pct": 0.912,
-      "lift_top10pct": 2.1,
-      "lapsed_roc_auc": 0.705,
-      "lapsed_precision_top10pct": 0.57,
-      "lapsed_lift_top10pct": 1.96
+      "precision_top10pct": 0.91,
+      "lift_top10pct": 2.09,
+      "lapsed_roc_auc": 0.706,
+      "lapsed_precision_top10pct": 0.579,
+      "lapsed_lift_top10pct": 2.0
     },
     "Gradient boosting": {
       "roc_auc": 0.793,
-      "avg_precision": 0.767,
-      "precision_top10pct": 0.933,
-      "lift_top10pct": 2.14,
-      "lapsed_roc_auc": 0.711,
-      "lapsed_precision_top10pct": 0.636,
-      "lapsed_lift_top10pct": 2.19
+      "avg_precision": 0.766,
+      "precision_top10pct": 0.926,
+      "lift_top10pct": 2.13,
+      "lapsed_roc_auc": 0.71,
+      "lapsed_precision_top10pct": 0.645,
+      "lapsed_lift_top10pct": 2.22
     }
   },
   "auc_difference_vs_recency_rule": {
     "all_customers": {
-      "auc_difference": 0.031,
+      "auc_difference": 0.03,
       "ci95": [
-        0.024,
+        0.023,
         0.038
       ]
     },
     "lapsed_only": {
-      "auc_difference": 0.026,
+      "auc_difference": 0.025,
       "ci95": [
         0.012,
-        0.039
+        0.038
       ]
     }
   },
   "calibration_gradient_boosting": [
     {
       "bin": 0,
-      "predicted": 0.032,
-      "observed": 0.099,
+      "predicted": 0.031,
+      "observed": 0.087,
       "customers": 526
     },
     {
       "bin": 1,
-      "predicted": 0.058,
-      "observed": 0.16,
-      "customers": 526
+      "predicted": 0.057,
+      "observed": 0.168,
+      "customers": 525
     },
     {
       "bin": 2,
-      "predicted": 0.093,
-      "observed": 0.236,
+      "predicted": 0.094,
+      "observed": 0.24,
       "customers": 525
     },
     {
       "bin": 3,
       "predicted": 0.135,
-      "observed": 0.268,
-      "customers": 526
-    },
-    {
-      "bin": 4,
-      "predicted": 0.178,
-      "observed": 0.343,
+      "observed": 0.272,
       "customers": 525
     },
     {
-      "bin": 5,
-      "predicted": 0.236,
-      "observed": 0.439,
+      "bin": 4,
+      "predicted": 0.175,
+      "observed": 0.352,
       "customers": 526
+    },
+    {
+      "bin": 5,
+      "predicted": 0.237,
+      "observed": 0.427,
+      "customers": 525
     },
     {
       "bin": 6,
       "predicted": 0.338,
-      "observed": 0.526,
+      "observed": 0.516,
       "customers": 525
     },
     {
       "bin": 7,
-      "predicted": 0.482,
-      "observed": 0.62,
-      "customers": 526
+      "predicted": 0.48,
+      "observed": 0.63,
+      "customers": 525
     },
     {
       "bin": 8,
       "predicted": 0.688,
-      "observed": 0.728,
+      "observed": 0.73,
       "customers": 525
     },
     {
       "bin": 9,
-      "predicted": 0.921,
-      "observed": 0.933,
+      "predicted": 0.918,
+      "observed": 0.926,
       "customers": 526
     }
   ],
   "lapsed_group": {
     "definition": "no order in the 90 days before the test cutoff",
-    "customers": 3353,
+    "customers": 3351,
     "reactivation_rate_next_90d": 0.29,
     "active_group_repurchase_rate": 0.69
   },
   "permutation_importance_auc_drop": {
-    "recency_days": 0.0612,
-    "frequency": 0.0297,
-    "monetary": 0.0201,
-    "revenue_last_90d": 0.0074,
-    "tenure_days": 0.0037,
-    "orders_last_90d": 0.0032
+    "recency_days": 0.0685,
+    "frequency": 0.0239,
+    "monetary": 0.0225,
+    "revenue_last_90d": 0.0069,
+    "tenure_days": 0.0038,
+    "orders_last_90d": 0.0029
   },
   "rfm_segments": {
     "Champions": {
-      "customers": 1200.0,
-      "revenue_share": 0.7,
-      "median_recency": 28.0,
+      "customers": 1232,
+      "revenue_share": 0.712,
+      "median_recency": 29.0,
       "median_orders": 10.0,
-      "repurchase_rate_90d": 0.803,
-      "customer_share": 0.228
+      "repurchase_rate_90d": 0.798,
+      "customer_share": 0.235
     },
     "Loyal": {
-      "customers": 1179.0,
-      "revenue_share": 0.145,
-      "median_recency": 114.0,
+      "customers": 976,
+      "revenue_share": 0.125,
+      "median_recency": 119.0,
       "median_orders": 4.0,
-      "repurchase_rate_90d": 0.508,
-      "customer_share": 0.224
+      "repurchase_rate_90d": 0.523,
+      "customer_share": 0.186
     },
     "New / recent": {
-      "customers": 384.0,
-      "revenue_share": 0.014,
-      "median_recency": 42.0,
+      "customers": 475,
+      "revenue_share": 0.018,
+      "median_recency": 43.0,
       "median_orders": 1.0,
-      "repurchase_rate_90d": 0.477,
-      "customer_share": 0.073
+      "repurchase_rate_90d": 0.474,
+      "customer_share": 0.09
     },
     "At risk (were frequent)": {
-      "customers": 323.0,
-      "revenue_share": 0.06,
-      "median_recency": 304.0,
+      "customers": 351,
+      "revenue_share": 0.062,
+      "median_recency": 306.0,
       "median_orders": 5.0,
-      "repurchase_rate_90d": 0.328,
-      "customer_share": 0.061
+      "repurchase_rate_90d": 0.311,
+      "customer_share": 0.067
     },
     "Occasional": {
-      "customers": 390.0,
-      "revenue_share": 0.012,
-      "median_recency": 170.0,
+      "customers": 468,
+      "revenue_share": 0.016,
+      "median_recency": 169.0,
       "median_orders": 1.0,
-      "repurchase_rate_90d": 0.231,
-      "customer_share": 0.074
+      "repurchase_rate_90d": 0.248,
+      "customer_share": 0.089
     },
-    "Lapsed": {
-      "customers": 1780.0,
-      "revenue_share": 0.069,
+    "Dormant": {
+      "customers": 1751,
+      "revenue_share": 0.067,
       "median_recency": 362.0,
       "median_orders": 1.0,
-      "repurchase_rate_90d": 0.194,
-      "customer_share": 0.339
+      "repurchase_rate_90d": 0.195,
+      "customer_share": 0.333
     }
   },
   "kmeans_silhouette": {
     "by_k": {
-      "2": 0.46,
-      "3": 0.355,
+      "2": 0.455,
+      "3": 0.354,
       "4": 0.378,
-      "5": 0.337,
+      "5": 0.335,
       "6": 0.333,
       "7": 0.297
     },
@@ -209,52 +214,52 @@
   },
   "kmeans_profile_k": {
     "0": {
-      "customers": 1834.0,
-      "median_recency": 38.0,
-      "median_orders": 8.0,
-      "median_monetary": 2963.975,
-      "repurchase_rate_90d": 0.722
-    },
-    "1": {
-      "customers": 3422.0,
+      "customers": 3426.0,
       "median_recency": 290.0,
       "median_orders": 2.0,
-      "median_monetary": 426.48,
+      "median_monetary": 425.81,
       "repurchase_rate_90d": 0.281
+    },
+    "1": {
+      "customers": 1827.0,
+      "median_recency": 38.0,
+      "median_orders": 8.0,
+      "median_monetary": 2953.28,
+      "repurchase_rate_90d": 0.722
     }
   },
   "lapsed_targeting_table": [
     {
       "contact_share": 0.05,
       "contacted": 167,
-      "returners_model": 118,
-      "returners_random": 48.5,
-      "revenue_next_90d_model_gbp": 110993,
-      "revenue_next_90d_random_gbp": 29242
+      "returners_model": 116,
+      "returners_random": 48.4,
+      "revenue_next_90d_model_gbp": 96109,
+      "revenue_next_90d_random_gbp": 28769
     },
     {
       "contact_share": 0.1,
       "contacted": 335,
-      "returners_model": 213,
-      "returners_random": 97.3,
-      "revenue_next_90d_model_gbp": 179089,
-      "revenue_next_90d_random_gbp": 58660
+      "returners_model": 216,
+      "returners_random": 97.2,
+      "revenue_next_90d_model_gbp": 180273,
+      "revenue_next_90d_random_gbp": 57711
     },
     {
       "contact_share": 0.2,
       "contacted": 670,
-      "returners_model": 360,
-      "returners_random": 194.6,
-      "revenue_next_90d_model_gbp": 273392,
-      "revenue_next_90d_random_gbp": 117320
+      "returners_model": 358,
+      "returners_random": 194.3,
+      "revenue_next_90d_model_gbp": 260976,
+      "revenue_next_90d_random_gbp": 115422
     },
     {
       "contact_share": 0.3,
       "contacted": 1005,
-      "returners_model": 487,
-      "returners_random": 291.9,
-      "revenue_next_90d_model_gbp": 349955,
-      "revenue_next_90d_random_gbp": 175980
+      "returners_model": 488,
+      "returners_random": 291.5,
+      "revenue_next_90d_model_gbp": 343329,
+      "revenue_next_90d_random_gbp": 173133
     }
   ],
   "holdout_test_sample_sizes": [
@@ -278,21 +283,21 @@
     },
     {
       "group": "top 20% of lapsed by score",
-      "baseline_rate": 0.537,
+      "baseline_rate": 0.534,
       "uplift_pp": 2,
-      "customers_per_arm": 9722
+      "customers_per_arm": 9733
     },
     {
       "group": "top 20% of lapsed by score",
-      "baseline_rate": 0.537,
+      "baseline_rate": 0.534,
       "uplift_pp": 3,
-      "customers_per_arm": 4312
+      "customers_per_arm": 4317
     },
     {
       "group": "top 20% of lapsed by score",
-      "baseline_rate": 0.537,
+      "baseline_rate": 0.534,
       "uplift_pp": 5,
-      "customers_per_arm": 1545
+      "customers_per_arm": 1547
     }
   ]
 }

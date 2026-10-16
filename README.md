@@ -20,7 +20,7 @@ save offer is actually worth.
 | Question | Answer |
 |---|---|
 | How many customers come back? | In the 2010 cohorts, about 20% order again in month 1 and about 18% still order in month 12 |
-| Where does the revenue come from? | The "Champions" segment (top fifth on recency, frequency and spend; 23% of customers) holds 71% of spend up to Sept 2011, partly by construction; the dormant third of customers holds 7% |
+| Where does the revenue come from? | The "Champions" segment (score of 4 or 5 out of 5 on each of recency, frequency and spend, i.e. the top two-fifths on each; 23% of customers) holds 71% of spend up to Sept 2011, partly by construction; the dormant third of customers holds 7% |
 | Can a model predict who orders in the next 90 days? | Yes, but a recency rule does most of the work: AUC 0.79 versus 0.76, a gain of 0.03 (95% CI 0.02 to 0.04) |
 | Which customers with no order in 90 days are most likely to return? | The top 10% by model score returned at 64%, versus 29% for all of them |
 | What should happen next? | A holdout experiment: the model predicts who returns, not who a campaign would change |
@@ -68,7 +68,7 @@ Dec 2010 is left out because its month 12 is only nine days of data. Month N mea
 
 ![Cohort retention](reports/figures/cohort_retention.png)
 
-**Spend is concentrated, partly by construction.** Champions are the top fifth on recency, frequency and spend, so their share of
+**Spend is concentrated, partly by construction.** Champions score 4 or 5 out of 5 (the top two-fifths) on each of recency, frequency and spend, so their share of
 spend is high by definition; the useful part is the contrast. They reorder within 90 days 80% of the time, the dormant segment about 20%.
 Spend here is cumulative up to Sept 2011 for customers who existed then.
 

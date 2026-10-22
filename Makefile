@@ -1,19 +1,22 @@
-.PHONY: setup data analysis test lint all
+.PHONY: setup data analysis export test lint all
 
 setup:
-	python -m pip install -r requirements.txt
+	uv sync --locked
 
 data:
-	python src/download.py
-	python src/prepare.py
+	uv run python src/download.py
+	uv run python src/prepare.py
 
 analysis:
-	python src/analysis.py
+	uv run python src/analysis.py
+
+export:
+	uv run python src/export_site.py
 
 test:
-	python -m pytest -q
+	uv run pytest -q
 
 lint:
-	python -m ruff check .
+	uv run ruff check .
 
 all: data analysis

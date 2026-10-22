@@ -1,7 +1,7 @@
 # Customer retention and reactivation analysis
 
 [![CI](https://github.com/MaHmOuDeB/customer-retention-rfm/actions/workflows/ci.yml/badge.svg)](https://github.com/MaHmOuDeB/customer-retention-rfm/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/python-3.9%2B-blue)
+![Python](https://img.shields.io/badge/python-3.12%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 Who comes back, who has gone quiet, and which lapsed customers are worth a win-back offer? Two years of orders from a UK
@@ -20,7 +20,7 @@ save offer is actually worth.
 | Question | Answer |
 |---|---|
 | How many customers come back? | In the 2010 cohorts, about 20% order again in month 1 and about 18% still order in month 12 |
-| Where does the revenue come from? | The "Champions" segment (score of 4 or 5 out of 5 on each of recency, frequency and spend, i.e. the top two-fifths on each; 23% of customers) holds 71% of spend up to Sept 2011, partly by construction; the dormant third of customers holds 7% |
+| Where does the revenue come from? | The "Champions" segment (23% of customers) holds 71% of spend up to Sept 2011, partly by construction; the dormant third of customers holds 7%. Champions score 4 or 5 out of 5 on each of recency, frequency and spend (roughly the top two-fifths on each). |
 | Can a model predict who orders in the next 90 days? | Yes, but a recency rule does most of the work: AUC 0.79 versus 0.76, a gain of 0.03 (95% CI 0.02 to 0.04) |
 | Which customers with no order in 90 days are most likely to return? | The top 10% by model score returned at 64%, versus 29% for all of them |
 | What should happen next? | A holdout experiment: the model predicts who returns, not who a campaign would change |
@@ -68,7 +68,7 @@ Dec 2010 is left out because its month 12 is only nine days of data. Month N mea
 
 ![Cohort retention](reports/figures/cohort_retention.png)
 
-**Spend is concentrated, partly by construction.** Champions score 4 or 5 out of 5 (the top two-fifths) on each of recency, frequency and spend, so their share of
+**Spend is concentrated, partly by construction.** Champions score 4 or 5 out of 5 on each of recency, frequency and spend (roughly the top two-fifths on each). Their share of
 spend is high by definition; the useful part is the contrast. They reorder within 90 days 80% of the time, the dormant segment about 20%.
 Spend here is cumulative up to Sept 2011 for customers who existed then.
 
@@ -125,9 +125,10 @@ to improve. A practical design is to run the test over several months or to incl
 ## Reproduce
 
 ```bash
-make setup      # pip install -r requirements.txt
+make setup      # uv sync --locked (needs uv; dependencies are pinned in uv.lock)
 make data       # downloads UCI Online Retail II (45 MB) and converts it to Parquet (a few minutes)
 make analysis   # writes reports/results.json and reports/figures/
+make export     # writes reports/site/retention.json, the numbers and tables the portfolio site reads
 make test       # unit tests on synthetic data, no download needed
 make lint
 ```
@@ -136,9 +137,9 @@ make lint
 
 ```
 sql/        01_clean (with the 24-hour reversal rule), 02_features (as of a cutoff + 90-day label), 03_cohorts
-src/        download.py, prepare.py, analysis.py (statistics and figures)
+src/        download.py, prepare.py, analysis.py (statistics and figures), export_site.py (the site export)
 tests/      cleaning, feature windows and label, scoring helpers, sample-size formula
-reports/    results.json and figures
+reports/    results.json, figures and site/retention.json (the export)
 ```
 
 Data: Chen, D. (2012). Online Retail II. UCI Machine Learning Repository, CC BY 4.0.

@@ -3,13 +3,31 @@ name = "customer-retention-rfm"
 version = "1.0.0"
 description = "Cohort retention, RFM segments and a 90-day repurchase model on UCI Online Retail II (DuckDB SQL + scikit-learn)"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.12"
 license = { text = "MIT" }
 authors = [{ name = "Mahmoud El Bergui" }]
+dependencies = [
+    "duckdb>=1.1",
+    "pandas>=2.1",
+    "numpy>=1.26",
+    "scikit-learn>=1.4",
+    "statsmodels>=0.14",
+    "matplotlib>=3.8,<3.10",
+    "pyarrow>=15",
+    "openpyxl>=3.1",
+]
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.5"]
+
+[tool.uv]
+package = false
+# Resolve as of this date and keep matplotlib 3.9: that reproduces reports/results.json and reports/figures byte for byte (newer scikit-learn or matplotlib change them).
+exclude-newer = "2025-10-04T00:00:00Z"
 
 [tool.ruff]
 line-length = 150
-target-version = "py39"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
